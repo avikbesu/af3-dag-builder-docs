@@ -227,6 +227,28 @@
   
   
   
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dags/container_workloads/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  DAG Diagrams
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
     <li class="md-tabs__item">
       <a href="../../onboarding/" class="md-tabs__link">
         
@@ -782,6 +804,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#dag-diagrams-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DAG diagrams (Mermaid)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -834,6 +867,215 @@
     
   
     Comparison vs DAG Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DAG Diagrams
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DAG Diagrams
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/container_workloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    container_workloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/ecommerce_platform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ecommerce_platform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/project_a/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    project_a
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/project_b/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    project_b
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/scale_demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    scale_demo
   
 
     
@@ -1045,6 +1287,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#dag-diagrams-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DAG diagrams (Mermaid)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1103,6 +1356,10 @@
 <tr>
 <td><code>--manifest</code></td>
 <td>Write <code>manifest.json</code> after generation (see <a href="#dag-manifest">DAG manifest</a>)</td>
+</tr>
+<tr>
+<td><code>--diagrams</code></td>
+<td>Write <code>docs/dags/&lt;project&gt;.md</code> Mermaid diagrams after generation (see <a href="#dag-diagrams-mermaid">DAG diagrams</a>); <code>make generate</code> passes this automatically</td>
 </tr>
 <tr>
 <td><code>--output-dir &lt;path&gt;</code></td>
@@ -1362,6 +1619,46 @@ daggen<span class="w"> </span>--settings<span class="w"> </span>config/settings.
 <li>Use <code>dag_count</code> in CI as a sanity check (alert if it drops unexpectedly)</li>
 <li>Drive operator/tag coverage reports</li>
 </ul>
+<h2 id="dag-diagrams-mermaid">DAG diagrams (Mermaid)<a class="headerlink" href="#dag-diagrams-mermaid" title="Permanent link">&para;</a></h2>
+<p>Pass <code>--diagrams</code> to write one Markdown file per project to <code>docs/dags/&lt;project&gt;.md</code>. <code>make generate</code> passes this flag automatically, so the diagrams stay in sync with your config on every generation run.</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>generate<span class="w"> </span><span class="nv">ENV</span><span class="o">=</span>prod
+<span class="c1"># → docs/dags/&lt;project&gt;.md for every project with at least one active DAG</span>
+</code></pre></div>
+<p>Each file contains, for every DAG generated in the active environment:</p>
+<ul>
+<li>Its description (or a placeholder if none is set)</li>
+<li>Its trigger (<code>schedule</code>, <code>catchup</code>, <code>max_active_runs</code>, <code>tags</code>)</li>
+<li>A <a href="https://mermaid.js.org/">Mermaid</a> <code>flowchart TD</code> diagram with one node per task, dependency edges (<code>upstream --&gt; downstream</code>), and hexagon-shaped nodes for any task-level dataset (asset) inlets/outlets, connected via dashed <code>-.produces.-&gt;</code> / <code>-.consumes.-&gt;</code> edges</li>
+<li>An <strong>Assets</strong> list for every dataset URI touched by the DAG, cross-referencing any <em>other</em> DAG — in this project or any other — that also produces or consumes the same URI</li>
+</ul>
+<p>GitHub, GitLab, and most Markdown viewers render Mermaid code blocks natively, so these files can be browsed directly in the repo without any extra tooling. They're also part of this MkDocs site — see <a href="../../dags/ecommerce_platform/">DAG Diagrams</a> for the generated examples.</p>
+<p><strong>Example</strong> (from <code>ecommerce_platform</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="gu">## ecom_orders_ingest</span>
+
+Daily ingestion of order records from S3 into Snowflake RAW layer
+
+<span class="gs">**Trigger:**</span> schedule <span class="sb">`0 3 * * *`</span>  ·  <span class="gs">**catchup:**</span> false  ·  <span class="gs">**max_active_runs:**</span> 1  ·  <span class="gs">**tags:**</span> ingestion, s3, ecommerce
+
+<span class="sb">```mermaid</span>
+<span class="s">flowchart TD</span>
+<span class="s">    health_check[&quot;health_check&lt;br/&gt;(PythonOperator)&quot;]</span>
+<span class="s">    ingest_to_snowflake[&quot;ingest_to_snowflake&lt;br/&gt;(S3ToSnowflakeOperator)&quot;]</span>
+<span class="s">    register_outlet[&quot;register_outlet&lt;br/&gt;(PythonOperator)&quot;]</span>
+<span class="s">    health_check --&gt; ingest_to_snowflake</span>
+<span class="s">    ingest_to_snowflake --&gt; register_outlet</span>
+<span class="s">    asset_0{{&quot;snowflake://myaccount/dwh/raw/orders_raw&quot;}}</span>
+<span class="s">    register_outlet -.produces.-&gt; asset_0</span>
+<span class="sb">```</span>
+
+<span class="gs">**Assets:**</span>
+
+<span class="k">-</span><span class="w"> </span><span class="sb">`snowflake://myaccount/dwh/raw/orders_raw`</span>
+</code></pre></div>
+<p>Cross-project cross-referencing means asset URIs declared as inlets on a <em>consumer</em> DAG (in any project) automatically show up as "consumed by: ..." on the <em>producer</em> DAG's page, and vice versa — useful for tracing data lineage across project boundaries without a separate catalog tool.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A project with zero DAGs active in the current environment produces no file — the set of <code>docs/dags/*.md</code> files always mirrors what <code>make generate</code> actually generates for that environment.</p>
+</div>
 
 
 

@@ -227,6 +227,28 @@
   
   
   
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dags/container_workloads/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  DAG Diagrams
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
     <li class="md-tabs__item">
       <a href="../../onboarding/" class="md-tabs__link">
         
@@ -621,6 +643,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#task-level-_env-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task-level _env overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#enabled_envs-and-enabled_classes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -821,6 +854,215 @@
   
   
   
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DAG Diagrams
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DAG Diagrams
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/container_workloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    container_workloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/ecommerce_platform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ecommerce_platform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/project_a/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    project_a
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/project_b/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    project_b
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/scale_demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    scale_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../onboarding/" class="md-nav__link">
         
@@ -922,6 +1164,17 @@
     <span class="md-ellipsis">
       
         DAG-level _env overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-level-_env-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task-level _env overrides
       
     </span>
   </a>
@@ -1055,7 +1308,8 @@ flowchart TD
     D --&gt;|no / unset| E["Merge default_args._env[env]"]
     E --&gt; F["Merge DAG-level _env[env]\nschedule, catchup, max_active_runs, tags"]
     F --&gt; G["Per task: drop if enabled[env]==false,\nclean dangling dependency edges,\nmerge params._env[env]"]
-    G --&gt; H["Resolved DAG -&gt; rendered to output/dags/*.py"]</code></pre>
+    G --&gt; I["Per task: merge task-level _env[env]\ntrigger_rule, pool, pool_slots, queue,\npriority_weight, weight_rule,\nexecution_timeout_minutes, sla_minutes"]
+    I --&gt; H["Resolved DAG -&gt; rendered to output/dags/*.py"]</code></pre>
 <ol>
 <li><code>enabled_envs</code> whitelist (if set, the active env must be in the list)</li>
 <li><code>enabled_classes</code> whitelist (if set, the active env's class must be in the list)</li>
@@ -1063,6 +1317,7 @@ flowchart TD
 <li><code>default_args._env[env]</code> merged onto base <code>default_args</code></li>
 <li>DAG-level <code>_env[env]</code> merged (schedule, catchup, max_active_runs, tags)</li>
 <li>Per task: <code>enabled[env] == false</code> → task omitted and downstream dependency edges cleaned; <code>params._env[env]</code> merged onto base <code>params</code> and the <code>_env</code> key removed from output</li>
+<li>Per task: task-level <code>_env[env]</code> merged (trigger_rule, pool, pool_slots, queue, priority_weight, weight_rule, execution_timeout_minutes, sla_minutes) — see <a href="#task-level-env-overrides">Task-level <code>_env</code> overrides</a></li>
 </ol>
 <h2 id="environment-taxonomy-and-classes">Environment taxonomy and classes<a class="headerlink" href="#environment-taxonomy-and-classes" title="Permanent link">&para;</a></h2>
 <p>By default the generator recognises three built-in environment names and maps them to a class:</p>
@@ -1156,6 +1411,71 @@ flowchart TD
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Only non-null values in the override block are applied; unset fields keep their base value.</p>
+</div>
+<h2 id="task-level-_env-overrides">Task-level <code>_env</code> overrides<a class="headerlink" href="#task-level-_env-overrides" title="Permanent link">&para;</a></h2>
+<p>In addition to <code>params._env</code> (arbitrary operator params) and the DAG-level <code>_env</code> block (schedule/catchup/max_active_runs/tags), a task's scheduling and execution fields can be overridden per environment using <code>_env</code> at the task level:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">heavy_transform</span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PythonOperator</span>
+<span class="w">    </span><span class="nt">pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default_pool</span>
+<span class="w">    </span><span class="nt">priority_weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">execution_timeout_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">    </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">python_callable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pkg.transform</span>
+
+<span class="w">    </span><span class="nt">_env</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">prod</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high_mem</span><span class="w">            </span><span class="c1"># run on a dedicated pool in prod</span>
+<span class="w">        </span><span class="nt">priority_weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">        </span><span class="c1"># prioritize in prod</span>
+<span class="w">        </span><span class="nt">execution_timeout_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span><span class="w">   </span><span class="c1"># allow longer runtime in prod</span>
+<span class="w">        </span><span class="nt">queue</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod_queue</span>
+</code></pre></div>
+<p>Fields supported in a task-level <code>_env</code> block:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trigger_rule</code></td>
+<td>Override how this task reacts to upstream task state</td>
+</tr>
+<tr>
+<td><code>pool</code></td>
+<td>Override the Airflow pool this task runs in</td>
+</tr>
+<tr>
+<td><code>pool_slots</code></td>
+<td>Override the number of pool slots this task occupies</td>
+</tr>
+<tr>
+<td><code>queue</code></td>
+<td>Override the Celery/Kubernetes queue</td>
+</tr>
+<tr>
+<td><code>priority_weight</code></td>
+<td>Override the task's priority</td>
+</tr>
+<tr>
+<td><code>weight_rule</code></td>
+<td>Override the priority-weighting algorithm</td>
+</tr>
+<tr>
+<td><code>execution_timeout_minutes</code></td>
+<td>Override the maximum runtime before the task is killed</td>
+</tr>
+<tr>
+<td><code>sla_minutes</code></td>
+<td>Override the expected maximum duration before <code>on_sla_miss_callback</code> fires</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only non-null values in the override block are applied; unset fields keep their base value. For overriding operator-specific params (e.g. <code>bash_command</code>, connection ids), use <code>params._env</code> instead — see <a href="#environment-overrides">Environment overrides</a> above.</p>
 </div>
 <h2 id="enabled_envs-and-enabled_classes"><code>enabled_envs</code> and <code>enabled_classes</code><a class="headerlink" href="#enabled_envs-and-enabled_classes" title="Permanent link">&para;</a></h2>
 <p>Two whitelist fields give you precise control over which environments a DAG is generated for, without maintaining a per-env <code>enabled</code> map.</p>
