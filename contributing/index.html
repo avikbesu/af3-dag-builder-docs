@@ -1,0 +1,1927 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Generate Apache Airflow 3 DAGs from a single canonical YAML config">
+      
+      
+      
+      
+        <link rel="prev" href="../onboarding/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Contributing - af3-dag-builder</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#contributing-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="af3-dag-builder" class="md-header__button md-logo" aria-label="af3-dag-builder" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            af3-dag-builder
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Contributing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/avikbesu/af3-dag-builder" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../userguide/quickstart/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../onboarding/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Onboarding
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contributing
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="af3-dag-builder" class="md-nav__button md-logo" aria-label="af3-dag-builder" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    af3-dag-builder
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/avikbesu/af3-dag-builder" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ & Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/yaml-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    YAML Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/environments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Templates & Reuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/custom-operators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operators & Callbacks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/validation-ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation, Output & CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/advanced-features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../userguide/comparison/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparison vs DAG Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../onboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Onboarding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-repository-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Repository overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-development-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Development prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-building-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Building locally
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-running-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Running tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-architecture-deep-dive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Architecture deep-dive
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Architecture deep-dive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-go-generator-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Go generator pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-environment-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Environment resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-template-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Template rendering
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-making-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Making changes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Making changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-adding-a-new-yaml-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Adding a new YAML field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-adding-a-standard-operator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Adding a standard operator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-modifying-the-dag-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Modifying the DAG template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-extending-environment-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Extending environment resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-adding-a-template-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 Adding a template function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-adding-a-linting-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6 Adding a linting rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-writing-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Writing tests
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Writing tests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#go-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Go tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-code-style-and-linting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Code style and linting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-schema-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Schema versioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-keeping-docsuserguide-current" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Keeping docs/userguide/ current
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-pull-request-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Pull request checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-project-decisions-and-trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Project decisions and trade-offs
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-repository-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Repository overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-development-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Development prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-building-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Building locally
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-running-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Running tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-architecture-deep-dive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Architecture deep-dive
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Architecture deep-dive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-go-generator-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Go generator pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-environment-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Environment resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-template-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Template rendering
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-making-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Making changes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Making changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-adding-a-new-yaml-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Adding a new YAML field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-adding-a-standard-operator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Adding a standard operator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-modifying-the-dag-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Modifying the DAG template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-extending-environment-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Extending environment resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-adding-a-template-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 Adding a template function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-adding-a-linting-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6 Adding a linting rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-writing-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Writing tests
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Writing tests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#go-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Go tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-code-style-and-linting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Code style and linting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-schema-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Schema versioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-keeping-docsuserguide-current" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Keeping docs/userguide/ current
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-pull-request-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Pull request checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-project-decisions-and-trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Project decisions and trade-offs
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="contributing-guide">Contributing Guide<a class="headerlink" href="#contributing-guide" title="Permanent link">&para;</a></h1>
+<p>This guide is for developers working on the generator itself — the Go generator, DAG template, JSON schema, and test suites. For the guide on defining DAGs as a user, see <code>docs/userguide/</code> (or the published MkDocs site).</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-repository-overview">Repository overview</a></li>
+<li><a href="#2-development-prerequisites">Development prerequisites</a></li>
+<li><a href="#3-building-locally">Building locally</a></li>
+<li><a href="#4-running-tests">Running tests</a></li>
+<li><a href="#5-architecture-deep-dive">Architecture deep-dive</a></li>
+<li><a href="#51-go-generator-pipeline">Go generator pipeline</a></li>
+<li><a href="#52-environment-resolution">Environment resolution</a></li>
+<li><a href="#53-template-rendering">Template rendering</a></li>
+<li><a href="#6-making-changes">Making changes</a></li>
+<li><a href="#61-adding-a-new-yaml-field">Adding a new YAML field</a></li>
+<li><a href="#62-adding-a-standard-operator">Adding a standard operator</a></li>
+<li><a href="#63-modifying-the-dag-template">Modifying the DAG template</a></li>
+<li><a href="#64-extending-environment-resolution">Extending environment resolution</a></li>
+<li><a href="#65-adding-a-template-function">Adding a template function</a></li>
+<li><a href="#7-writing-tests">Writing tests</a></li>
+<li><a href="#8-code-style-and-linting">Code style and linting</a></li>
+<li><a href="#9-schema-versioning">Schema versioning</a></li>
+<li><a href="#10-pull-request-checklist">Pull request checklist</a></li>
+<li><a href="#11-project-decisions-and-trade-offs">Project decisions and trade-offs</a></li>
+</ol>
+<hr />
+<h2 id="1-repository-overview">1. Repository overview<a class="headerlink" href="#1-repository-overview" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>airflow3-dag-gen/
+│
+├── app/dagGen/                        # Go DAG generator
+│   ├── cmd/daggen/main.go             # CLI entry point
+│   ├── internal/
+│   │   ├── config/
+│   │   │   ├── types.go              # All YAML struct definitions
+│   │   │   ├── linting.go            # LintRules struct + LoadLintRules()
+│   │   │   └── loader.go             # YAML loading, project discovery, merging
+│   │   ├── env/
+│   │   │   └── resolver.go           # Environment override resolution
+│   │   ├── generator/
+│   │   │   ├── dag.go                # Render data structs + parallel orchestration
+│   │   │   ├── manifest.go           # BuildManifest() → manifest.json metadata
+│   │   │   ├── operator.go           # Operator → import statement mapping
+│   │   │   └── template.go           # Template helper functions
+│   │   ├── linter/
+│   │   │   └── linter.go             # Lint() — naming convention enforcement
+│   │   └── output/
+│   │       ├── local.go              # Write .py files + parallel py_compile + incremental cache
+│   │       └── image.go              # Docker image build
+│   └── templates/
+│       └── dag.py.tmpl               # Go text/template for Python DAG output
+│
+├── config/
+│   ├── settings.yaml                 # Runtime config (env, output)
+│   ├── linting.yaml                  # Optional naming-convention rules (dag_id, task_id, tags)
+│   ├── schema/dags.schema.json       # JSON Schema (Draft 7) for all project YAMLs
+│   ├── operators/registry.yaml       # Global custom operator registry
+│   └── projects/                     # User project configs (auto-discovered)
+│       ├── project_a/dags.yaml
+│       └── project_b/
+│           ├── defaults.yaml
+│           ├── pipelines.yaml
+│           └── reporting_dags.yaml
+│
+├── scripts/
+│   ├── validate_configs.py           # JSON schema validation runner
+│   ├── validate_operators.py         # Registry compliance checker
+│   ├── lint_secrets.py               # Secret pattern scanner
+│   ├── promote.py                    # Env diff helper
+│   └── pre-commit                    # Git hook: runs full test suite
+│
+├── docker-compose.yml                # Local Airflow 3 (for smoke tests)
+├── Makefile                          # All developer workflows
+├── docs/userguide/                   # User-facing guide, split by topic (published via MkDocs)
+└── CONTRIBUTING.md
+</code></pre></div>
+<hr />
+<h2 id="2-development-prerequisites">2. Development prerequisites<a class="headerlink" href="#2-development-prerequisites" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Go</td>
+<td>1.22+</td>
+<td>Build and test the generator</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.10+</td>
+<td>Validation scripts, syntax checks</td>
+</tr>
+<tr>
+<td>Docker + Compose</td>
+<td>any recent</td>
+<td>Local Airflow smoke tests, image output mode</td>
+</tr>
+<tr>
+<td>golangci-lint</td>
+<td>1.57+</td>
+<td>Go linting (<code>make lint</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Install Python tools used by scripts:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>jsonschema<span class="w"> </span>pyyaml
+</code></pre></div>
+<hr />
+<h2 id="3-building-locally">3. Building locally<a class="headerlink" href="#3-building-locally" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># Build Go binary</span>
+make<span class="w"> </span>build
+
+<span class="c1"># same</span>
+make<span class="w"> </span>build-go
+<span class="c1"># Binary written to: app/dagGen/bin/daggen</span>
+
+<span class="c1"># Install the git pre-commit hook (runs tests before every commit)</span>
+make<span class="w"> </span>install-hooks
+</code></pre></div>
+<p>The pre-commit hook blocks commits that break any test. Bypass sparingly with <code>git commit --no-verify</code>.</p>
+<hr />
+<h2 id="4-running-tests">4. Running tests<a class="headerlink" href="#4-running-tests" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span><span class="nb">test</span><span class="w">      </span><span class="c1"># Go unit tests</span>
+make<span class="w"> </span>test-go<span class="w">   </span><span class="c1"># same</span>
+</code></pre></div>
+<p><strong>Test layout:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Test file</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cmd/daggen/*_test.go</code></td>
+<td>CLI flags, binary integration</td>
+</tr>
+<tr>
+<td><code>internal/config/*_test.go</code></td>
+<td>YAML loading, project discovery, merging</td>
+</tr>
+<tr>
+<td><code>internal/env/*_test.go</code></td>
+<td>Environment resolution logic</td>
+</tr>
+<tr>
+<td><code>internal/generator/*_test.go</code></td>
+<td>Template rendering, operator resolution</td>
+</tr>
+<tr>
+<td><code>internal/generator/manifest_test.go</code></td>
+<td>Manifest struct correctness, env filtering</td>
+</tr>
+<tr>
+<td><code>internal/linter/*_test.go</code></td>
+<td>Rule matching, pattern validation, tag/description checks</td>
+</tr>
+<tr>
+<td><code>internal/output/*_test.go</code></td>
+<td>File writing, py_compile validation</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-architecture-deep-dive">5. Architecture deep-dive<a class="headerlink" href="#5-architecture-deep-dive" title="Permanent link">&para;</a></h2>
+<h3 id="51-go-generator-pipeline">5.1 Go generator pipeline<a class="headerlink" href="#51-go-generator-pipeline" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>main.go
+  │
+  ├── config/loader.go
+  │     LoadSettings()        ← config/settings.yaml  (+ environments block)
+  │     LoadLintRules()       ← config/linting.yaml   (optional)
+  │     DiscoverProjects()    ← config/projects/*/
+  │     LoadProject()         ← dags.yaml / defaults.yaml + extra *.yaml files
+  │                              expandDAGInstances()  ← dag_instances → DAG structs
+  │
+  ├── env/resolver.go
+  │     Resolve()             ← filters by enabled_envs, enabled_classes, enabled map
+  │     resolveDAGFields()    ← DAG-level _env overrides (schedule, catchup, etc.)
+  │     ResolveTasks()        ← filters disabled tasks, cleans dep edges
+  │     resolveDefaultArgs()  ← merges _env overrides into default_args
+  │     MergeParams()         ← merges _env overrides into task params
+  │
+  ├── linter/linter.go
+  │     Lint()                ← checks dag_id/task_id patterns, required tags, description
+  │
+  ├── generator/dag.go
+  │     Generate()            ← Phase 1: render all DAGs (serial)
+  │                              Phase 2: write via goroutine pool (parallel py_compile)
+  │     renderDAG()           ← builds DAGRenderData, executes template
+  │     buildTaskRenderData() ← builds TaskRenderData slice
+  │     collectCallbackImports() ← resolves callback import statements
+  │
+  ├── generator/manifest.go
+  │     BuildManifest()       ← resolves env + builds Manifest struct → manifest.json
+  │
+  ├── generator/operator.go
+  │     ResolveImports()      ← deduped import statements for all operators
+  │     ResolveClass()        ← class name for template (last path segment)
+  │
+  ├── generator/template.go
+  │     TemplateFuncs()       ← pythonBool, pythonValue, pyStr, etc.
+  │
+  ├── templates/dag.py.tmpl   ← Go text/template → Python source
+  │
+  └── output/local.go | output/image.go
+        Write()               ← writes .py, validates with py_compile (parallel)
+        Flush()               ← saves incremental hash cache (.daggen-cache.json)
+</code></pre></div>
+<p><strong>Key design choice:</strong> the template receives <code>DAGRenderData</code> — a plain Go struct with no methods. All logic lives in Go; the template is pure presentation. This keeps the template readable and keeps business logic testable.</p>
+<h3 id="52-environment-resolution">5.2 Environment resolution<a class="headerlink" href="#52-environment-resolution" title="Permanent link">&para;</a></h3>
+<p>Resolution happens after preprocessing (defaults → task library → templates) and before rendering. The key invariant: <strong>the resolved struct contains no <code>_env</code> keys and no disabled items</strong>.</p>
+<div class="highlight"><pre><span></span><code>Input DAG (raw from YAML)
+  │
+  ├── dag.enabled_envs set and env not in list?     →  skip entirely (return false)
+  │
+  ├── dag.enabled_classes set and envClass not in list?  →  skip entirely (return false)
+  │
+  ├── dag.enabled[env] == false?  →  skip entirely (return false)
+  │
+  ├── resolveDAGFields(dag, env)
+  │     apply _env[env] overrides: schedule, catchup, max_active_runs, tags
+  │
+  ├── resolveDefaultArgs(dag.DefaultArgs, env)
+  │     merge _env[env] fields into base, nil out EnvOverrides
+  │
+  └── ResolveTasks(dag.Tasks, env)
+        for each task:
+          isEnabled(task.Enabled, env) == false?  →  add to disabled set
+        for each non-disabled task:
+          MergeParams(task.Params, env)           →  merge _env, remove _env key
+          filterDeps(task.Dependencies, disabled) →  remove edges to disabled tasks
+          task.Enabled = nil
+</code></pre></div>
+<p><strong>Go:</strong> <code>app/dagGen/internal/env/resolver.go</code></p>
+<h3 id="53-template-rendering">5.3 Template rendering<a class="headerlink" href="#53-template-rendering" title="Permanent link">&para;</a></h3>
+<p>The DAG template (<code>app/dagGen/templates/dag.py.tmpl</code>) is a standard Go <code>text/template</code>. It is embedded via <code>go:embed</code> in <code>templates/embed.go</code> and read at runtime.</p>
+<p>Key template conventions:
+- <code>{{- action }}</code> trims all whitespace/newlines <strong>before</strong> the action
+- <code>{{ action -}}</code> trims all whitespace/newlines <strong>after</strong> the action
+- Optional fields use <code>{{- if .Field }}...{{- end }}</code> — omitted when zero value
+- <code>*bool</code> fields use the <code>boolPtrRendered</code> helper (returns <code>""</code> for nil → skipped by <code>{{with}}</code>)
+- All string-to-Python conversions go through <code>pyStr</code> (quoted) or <code>pythonValue</code> (type-aware)</p>
+<hr />
+<h2 id="6-making-changes">6. Making changes<a class="headerlink" href="#6-making-changes" title="Permanent link">&para;</a></h2>
+<h3 id="61-adding-a-new-yaml-field">6.1 Adding a new YAML field<a class="headerlink" href="#61-adding-a-new-yaml-field" title="Permanent link">&para;</a></h3>
+<p>Changes must be made in all four places — schema, types, resolver (if env-overridable), generator, and template.</p>
+<p><strong>Example: adding <code>retries_exponential_backoff: bool</code> to tasks.</strong></p>
+<p><strong>1. JSON Schema</strong> (<code>config/schema/dags.schema.json</code>) — add to the <code>task</code> definition:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&quot;retries_exponential_backoff&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Use exponential backoff between retries instead of fixed delay&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>2. Go types</strong> (<code>app/dagGen/internal/config/types.go</code>) — add to <code>Task</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">RetriesExponentialBackoff</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="s">`yaml:&quot;retries_exponential_backoff,omitempty&quot;`</span>
+</code></pre></div>
+<p><strong>3. Render data</strong> (<code>app/dagGen/internal/generator/dag.go</code>) — add to <code>TaskRenderData</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">RetriesExponentialBackoff</span><span class="w"> </span><span class="kt">bool</span>
+</code></pre></div>
+<p>Populate it in <code>buildTaskRenderData()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">result</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">TaskRenderData</span><span class="p">{</span>
+<span class="w">    </span><span class="o">...</span>
+<span class="w">    </span><span class="nx">RetriesExponentialBackoff</span><span class="p">:</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nx">RetriesExponentialBackoff</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>4. Template</strong> (<code>app/dagGen/templates/dag.py.tmpl</code>) — add inside the <code>Operator(...)</code> constructor:</p>
+<div class="highlight"><pre><span></span><code>{{- if .RetriesExponentialBackoff }}
+        retries_exponential_backoff=True,
+{{- end }}
+</code></pre></div>
+<p><strong>5. Tests</strong> — add a Go test in <code>dag_test.go</code>.</p>
+<h3 id="62-adding-a-standard-operator">6.2 Adding a standard operator<a class="headerlink" href="#62-adding-a-standard-operator" title="Permanent link">&para;</a></h3>
+<p>Standard operators are registered in the Go generator (<code>app/dagGen/internal/generator/operator.go</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">standardOperators</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+<span class="w">    </span><span class="o">...</span>
+<span class="w">    </span><span class="s">&quot;S3KeySensor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Update the standard operator table in <code>docs/userguide/custom-operators.md</code> and <code>docs/onboarding.md</code>.</p>
+<h3 id="63-modifying-the-dag-template">6.3 Modifying the DAG template<a class="headerlink" href="#63-modifying-the-dag-template" title="Permanent link">&para;</a></h3>
+<p>The template is at <code>app/dagGen/templates/dag.py.tmpl</code>. It is embedded at compile time — no separate copy step needed.</p>
+<p><strong>Whitespace control</strong> is critical in Python output. Use <code>{{-</code> and <code>-}}</code> to eliminate unintended blank lines. Run <code>make generate &amp;&amp; python3 -m py_compile output/dags/*.py</code> after any template change.</p>
+<p><strong>Testing template output</strong> — write a table-driven test in <code>dag_test.go</code> that creates a minimal <code>config.DAG</code>, calls <code>renderDAG</code>, and asserts on specific substrings in the output:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">TestMyNewField</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">dag</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">DAG</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test_dag&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@daily&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">StartDate</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">MyNewField</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;expected_value&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Tasks</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="nx">config</span><span class="p">.</span><span class="nx">Task</span><span class="p">{{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;t1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;EmptyOperator&quot;</span><span class="p">}},</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">project</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">config</span><span class="p">.</span><span class="nx">ProjectConfig</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;proj&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">DAGs</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="nx">config</span><span class="p">.</span><span class="nx">DAG</span><span class="p">{</span><span class="nx">dag</span><span class="p">}}</span>
+<span class="w">    </span><span class="nx">settings</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">config</span><span class="p">.</span><span class="nx">Settings</span><span class="p">{</span><span class="nx">Environment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dev&quot;</span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="nx">mockOutputHandler</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Generate</span><span class="p">([]</span><span class="o">*</span><span class="nx">config</span><span class="p">.</span><span class="nx">ProjectConfig</span><span class="p">{</span><span class="nx">project</span><span class="p">},</span><span class="w"> </span><span class="nx">settings</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">w</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">strings</span><span class="p">.</span><span class="nx">Contains</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="s">&quot;test_dag&quot;</span><span class="p">],</span><span class="w"> </span><span class="s">&quot;expected_value&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">t</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;expected &#39;expected_value&#39; in output:\n%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="s">&quot;test_dag&quot;</span><span class="p">])</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="64-extending-environment-resolution">6.4 Extending environment resolution<a class="headerlink" href="#64-extending-environment-resolution" title="Permanent link">&para;</a></h3>
+<p>When adding a new field that should be env-overridable (like an existing <code>_env</code> field):</p>
+<p><strong>Go</strong> — add to <code>DefaultArgsOverride</code> (for <code>default_args</code> fields) or handle in <code>MergeParams</code> (for task params, which already handles any key generically).</p>
+<p>For a completely new override section, follow the pattern in <code>resolveDefaultArgs</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">resolveDefaultArgs</span><span class="p">(</span><span class="nx">da</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">DefaultArgs</span><span class="p">,</span><span class="w"> </span><span class="nx">env</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">DefaultArgs</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">...</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">ov</span><span class="p">.</span><span class="nx">MyNewField</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">da</span><span class="p">.</span><span class="nx">MyNewField</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="o">*</span><span class="nx">ov</span><span class="p">.</span><span class="nx">MyNewField</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Task-level params already use generic map merging (<code>MergeParams</code>) so no changes are needed there for new task param fields.</p>
+<h3 id="65-adding-a-template-function">6.5 Adding a template function<a class="headerlink" href="#65-adding-a-template-function" title="Permanent link">&para;</a></h3>
+<p>Template functions live in <code>app/dagGen/internal/generator/template.go</code>. Register them in <code>TemplateFuncs()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">TemplateFuncs</span><span class="p">()</span><span class="w"> </span><span class="nx">template</span><span class="p">.</span><span class="nx">FuncMap</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">template</span><span class="p">.</span><span class="nx">FuncMap</span><span class="p">{</span>
+<span class="w">        </span><span class="o">...</span>
+<span class="w">        </span><span class="s">&quot;myNewFunc&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">myNewFunc</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">myNewFunc</span><span class="p">(</span><span class="nx">input</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">ToUpper</span><span class="p">(</span><span class="nx">input</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Then use in the template: <code>{{ .MyField | myNewFunc }}</code></p>
+<p>Write a unit test alongside the function. Keep functions pure and side-effect-free.</p>
+<h3 id="66-adding-a-linting-rule">6.6 Adding a linting rule<a class="headerlink" href="#66-adding-a-linting-rule" title="Permanent link">&para;</a></h3>
+<p>Linting rules are pure data — no code change needed for most additions. Edit <code>config/linting.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">rules</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dag_id</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^[a-z][a-z0-9_]*$&quot;</span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DAG</span><span class="nv"> </span><span class="s">IDs</span><span class="nv"> </span><span class="s">must</span><span class="nv"> </span><span class="s">be</span><span class="nv"> </span><span class="s">lowercase</span><span class="nv"> </span><span class="s">snake_case&quot;</span>
+<span class="w">  </span><span class="nt">required_tags</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">team</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">domain</span>
+<span class="w">  </span><span class="nt">description_required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p>To add a <strong>new rule type</strong> (e.g. check that <code>schedule</code> matches a pattern):</p>
+<ol>
+<li>Add a field to <code>LintRuleSet</code> in <code>app/dagGen/internal/config/linting.go</code></li>
+<li>Add a field to <code>LintRules.Rules</code> if needed</li>
+<li>Add the check in <code>Lint()</code> in <code>app/dagGen/internal/linter/linter.go</code></li>
+<li>Add a test in <code>linter_test.go</code></li>
+</ol>
+<p>The linter is always bypassed when <code>config/linting.yaml</code> does not exist.</p>
+<hr />
+<h2 id="7-writing-tests">7. Writing tests<a class="headerlink" href="#7-writing-tests" title="Permanent link">&para;</a></h2>
+<h3 id="go-tests">Go tests<a class="headerlink" href="#go-tests" title="Permanent link">&para;</a></h3>
+<p>Follow the existing table-driven pattern. Use <code>mockOutputHandler</code> from <code>dag_test.go</code> to capture output without writing files:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">mockOutputHandler</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">files</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
+<span class="p">}</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="w"> </span><span class="o">*</span><span class="nx">mockOutputHandler</span><span class="p">)</span><span class="w"> </span><span class="nx">Write</span><span class="p">(</span><span class="nx">dagID</span><span class="p">,</span><span class="w"> </span><span class="nx">group</span><span class="p">,</span><span class="w"> </span><span class="nx">content</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">files</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">files</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">m</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="nx">dagID</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">content</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Test naming:</strong> <code>Test&lt;Package&gt;_&lt;Scenario&gt;</code> — e.g., <code>TestResolver_DisabledTaskDepsRemoved</code>, <code>TestGenerate_TriggerRuleRendered</code>.</p>
+<p><strong>Coverage requirements:</strong>
+- Every new field added to <code>types.go</code> needs at least one renderer test in <code>dag_test.go</code>
+- Every change to <code>resolver.go</code> needs a resolution test in <code>resolver_test.go</code>
+- Operator resolution changes need tests in <code>operator_test.go</code></p>
+<hr />
+<h2 id="8-code-style-and-linting">8. Code style and linting<a class="headerlink" href="#8-code-style-and-linting" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>lint<span class="w">       </span><span class="c1"># runs golangci-lint</span>
+</code></pre></div>
+<p><strong>Go:</strong>
+- Standard <code>gofmt</code> formatting (enforced by golangci-lint)
+- No <code>panic</code> in library code — return errors
+- Error messages: lowercase, no trailing punctuation
+- Use <code>fmt.Errorf("context: %w", err)</code> for error wrapping</p>
+<p><strong>Comments:</strong>
+- Write comments only when the <em>why</em> is non-obvious
+- No doc comments restating what the function name already says
+- Mark intentional design constraints with a short inline comment</p>
+<hr />
+<h2 id="9-schema-versioning">9. Schema versioning<a class="headerlink" href="#9-schema-versioning" title="Permanent link">&para;</a></h2>
+<p>The schema version (<code>"1.0"</code>) is validated in <code>app/dagGen/internal/config/loader.go</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">CurrentSchemaVersion</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span>
+</code></pre></div>
+<p><strong>When to bump the version:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Change type</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New optional field</td>
+<td>No bump — backwards compatible</td>
+</tr>
+<tr>
+<td>Removed field</td>
+<td>Bump to <code>"2.0"</code></td>
+</tr>
+<tr>
+<td>Renamed field</td>
+<td>Bump to <code>"2.0"</code></td>
+</tr>
+<tr>
+<td>Changed field type</td>
+<td>Bump to <code>"2.0"</code></td>
+</tr>
+<tr>
+<td>New required field</td>
+<td>Bump to <code>"2.0"</code></td>
+</tr>
+</tbody>
+</table>
+<p>When bumping:
+1. Change <code>CurrentSchemaVersion</code> in <code>loader.go</code>
+2. Update the <code>version</code> pattern in <code>dags.schema.json</code> if needed
+3. Update all <code>version: "1.0"</code> lines in <code>config/projects/</code>
+4. Add a migration note in this file</p>
+<hr />
+<h2 id="10-keeping-docsuserguide-current">10. Keeping docs/userguide/ current<a class="headerlink" href="#10-keeping-docsuserguide-current" title="Permanent link">&para;</a></h2>
+<p>Field reference tables in <code>docs/userguide/yaml-reference.md</code> and <code>docs/userguide/custom-operators.md</code> are auto-generated from the JSON schema and <code>operator.go</code>. Never edit them by hand — your changes will be overwritten on the next <code>make docs</code> run.</p>
+<p><strong>When you add or change a field:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Update the schema (add/edit the property + its description)</span>
+<span class="c1">#    config/schema/dags.schema.json</span>
+
+<span class="c1"># 2. Regenerate the guide</span>
+make<span class="w"> </span>docs
+
+<span class="c1"># 3. Commit both files together</span>
+git<span class="w"> </span>add<span class="w"> </span>config/schema/dags.schema.json<span class="w"> </span>docs/userguide/yaml-reference.md
+</code></pre></div>
+<p><strong>Sections generated automatically</strong> (marked with <code>&lt;!-- generated:X --&gt;</code> / <code>&lt;!-- /generated:X --&gt;</code>):
+- DAG fields table (<code>docs/userguide/yaml-reference.md</code>) — from <code>schema.definitions.dag</code>
+- Task fields table (<code>docs/userguide/yaml-reference.md</code>) — from <code>schema.definitions.task</code>
+- trigger_rule values table (<code>docs/userguide/yaml-reference.md</code>) — from <code>schema.definitions.task.properties.trigger_rule.enum</code>
+- default_args fields table (<code>docs/userguide/yaml-reference.md</code>) — from <code>schema.definitions.default_args</code>
+- Standard operators table (<code>docs/userguide/custom-operators.md</code>) — from <code>app/dagGen/internal/generator/operator.go</code></p>
+<p><strong>Sections maintained by hand</strong> (everything else — narrative, examples, FAQ, headings).</p>
+<p><strong>CI gate:</strong> <code>make check</code> runs <code>python scripts/generate_docs.py --check</code> and fails if the guide is stale. You will see a unified diff showing exactly what changed in the schema but was not regenerated into the guide.</p>
+<p><strong>Adding per-value descriptions to trigger_rule or weight_rule:</strong> these are stored in the <code>TRIGGER_RULE_DESCRIPTIONS</code> dict in <code>scripts/generate_docs.py</code> (JSON Schema draft-7 has no per-enum-value metadata). Update the dict there.</p>
+<h2 id="11-pull-request-checklist">11. Pull request checklist<a class="headerlink" href="#11-pull-request-checklist" title="Permanent link">&para;</a></h2>
+<p>Before opening a PR, confirm:</p>
+<ul>
+<li>[ ] <code>make test</code> passes (Go unit tests)</li>
+<li>[ ] <code>make lint</code> passes (no golangci-lint errors)</li>
+<li>[ ] <code>make validate</code> passes against the existing project configs</li>
+<li>[ ] New fields are added to all relevant locations: schema, Go types, Go renderer, Go template</li>
+<li>[ ] New fields have tests in <code>dag_test.go</code></li>
+<li>[ ] <code>docs/userguide/</code> is updated with any new user-facing fields or behaviours</li>
+<li>[ ] Standard operator additions are documented in the operator table in <code>docs/userguide/custom-operators.md</code> and <code>docs/onboarding.md</code></li>
+<li>[ ] No hardcoded secrets, no debug print statements</li>
+<li>[ ] Commit messages are clear and self-contained — no "AI-generated", "Claude", or tool attribution</li>
+<li>[ ] <code>make lint-dags</code> passes (or no <code>config/linting.yaml</code> present)</li>
+<li>[ ] <code>make check</code> passes (schema + operators + secrets + linting + docs)</li>
+<li>[ ] New linting rules added to <code>config/linting.yaml</code> are documented in <code>docs/userguide/validation-ci.md</code></li>
+<li>[ ] <code>make validate</code> output shows correct env class for the test environment</li>
+</ul>
+<hr />
+<h2 id="11-project-decisions-and-trade-offs">11. Project decisions and trade-offs<a class="headerlink" href="#11-project-decisions-and-trade-offs" title="Permanent link">&para;</a></h2>
+<p><strong>Why Go for the generator?</strong></p>
+<p>Fast binary, zero Python runtime dependency, straightforward <code>text/template</code> for code generation, easy to embed templates at compile time with <code>go:embed</code>.</p>
+<p><strong>Why Go <code>text/template</code> and not a proper AST?</strong></p>
+<p>The generated Python is simple and fixed in structure. Template-based generation is easier to read, modify, and review than AST manipulation. The trade-off is that whitespace control requires <code>{{-</code> / <code>-}}</code> discipline.</p>
+<p><strong>Why not support sensor operators as standard?</strong></p>
+<p>Sensor configuration is highly operator-specific (poke interval, timeout, mode). Rather than guessing a lowest-common-denominator API for each sensor type, we keep the standard list focused on common action operators and let teams register the exact sensor class they need via <code>custom_operators</code>.</p>
+<p><strong>Why is <code>_env</code> a shallow merge?</strong></p>
+<p>Deep merging nested objects creates unexpected results when a user wants to replace a nested config entirely. Shallow merge is predictable: the entire value is replaced, not patched. For granular overrides, structure your YAML with scalar values that each have their own <code>_env</code>.</p>
+<p><strong>Why is there no circular dependency detection?</strong></p>
+<p>Adding a graph cycle check at generation time adds complexity but catches a problem that Airflow's own parser already catches at import time with a clear error message. Given that syntax validation (<code>py_compile</code>) already runs after generation, the cycle would be caught before deployment on the very next <code>make generate</code>.</p>
+<p><strong>Why is task library expansion non-recursive?</strong></p>
+<p>Recursive expansion (library tasks that <code>use</code> other library tasks) creates hard-to-trace resolution chains. The explicit design forces library entries to be self-contained, making their behaviour predictable at the use-site.</p>
+<p><strong>Why is parallel generation opt-in at the output handler level (not a CLI flag)?</strong></p>
+<p>The <code>Generate()</code> function checks whether the <code>OutputHandler</code> implements <code>Concurrent() bool</code> rather than accepting a <code>--workers</code> flag. This keeps the generator and output packages decoupled. <code>LocalWriter</code> returns <code>true</code> (safe because each goroutine writes a different file). <code>StdoutWriter</code> returns <code>false</code> (serial to keep dry-run output readable and deterministic).</p>
+<p><strong>Why is the incremental cache keyed by <code>dag_id</code> rather than input YAML hash?</strong></p>
+<p>Keying on the <em>rendered output</em> hash (not the input) means any change that affects the generated Python — template changes, Go binary updates, environment name changes — automatically invalidates the cache. Input-keyed caches would silently skip files after template or generator logic changes.</p>
+<p><strong>Why is the linter a separate package rather than part of the validator?</strong></p>
+<p>The validator (<code>config/loader.go</code>) enforces structural correctness (required fields, valid types). The linter enforces <em>project conventions</em> (naming patterns, required tags). Separating them makes the linter independently testable and entirely optional — teams can use the generator without ever touching <code>linting.yaml</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.top", "navigation.tabs", "navigation.indexes", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
