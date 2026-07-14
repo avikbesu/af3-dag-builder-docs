@@ -788,6 +788,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#test-coverage-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test coverage gates
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1282,6 +1293,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#test-coverage-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test coverage gates
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1570,11 +1592,26 @@ ls<span class="w"> </span>output/dags/
 <p>Linting is <strong>entirely opt-in</strong> — delete or rename <code>linting.yaml</code> to disable it. The <code>make check</code> target runs <code>make lint-dags</code> as part of the full CI gate.</p>
 </div>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>lint-dags<span class="w">     </span><span class="c1"># validate + linting only</span>
-make<span class="w"> </span>check<span class="w">         </span><span class="c1"># schema + operators + secrets + linting + multi-env render + docs</span>
+make<span class="w"> </span>check<span class="w">         </span><span class="c1"># schema + operators + secrets + linting + multi-env render + docs + coverage</span>
 </code></pre></div>
 <h3 id="multi-environment-render-check">Multi-environment render check<a class="headerlink" href="#multi-environment-render-check" title="Permanent link">&para;</a></h3>
 <p><code>make render-check</code> renders every project into a scratch directory once per environment (<code>dev</code>, <code>staging</code>, <code>prod</code>) and runs <code>python3 -m compileall</code> against the result, then discards the scratch output. It's part of <code>make check</code> / CI.</p>
 <p>This exists because the <a href="#dag-diagrams-mermaid">diagram-drift CI check</a> only regenerates output for whichever single environment is active in <code>config/settings.yaml</code> — a template or <code>_env</code> regression that's specific to <code>staging</code> or <code>prod</code> (and doesn't happen to change a Mermaid diagram) would otherwise reach <code>main</code> undetected. <code>render-check</code> exercises all three so a broken <code>_env</code> branch or template change fails CI regardless of which environment triggers it.</p>
+<h3 id="test-coverage-gates">Test coverage gates<a class="headerlink" href="#test-coverage-gates" title="Permanent link">&para;</a></h3>
+<p>Both the Go generator and the Python <code>scripts/*.py</code> have an enforced test-coverage floor in CI (default <strong>75%</strong>, <code>COVERAGE_THRESHOLD</code> in <code>ci.yml</code>):</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>coverage-check<span class="w">    </span><span class="c1"># Go: per-package, not a whole-module average</span>
+make<span class="w"> </span>test-python<span class="w">       </span><span class="c1"># Python: aggregate across scripts/*.py (pytest-cov --cov-fail-under)</span>
+</code></pre></div>
+<p><strong>Go coverage is checked per package</strong>, not as a single module-wide average — <code>scripts/check_go_coverage.py</code> parses the raw coverage profile and fails if <em>any</em> package (<code>internal/config</code>, <code>internal/env</code>, <code>internal/generator</code>, <code>internal/linter</code>, <code>internal/output</code>) is individually below the threshold, so one heavily-tested package can't mask a weak one.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>cmd/daggen</code> is exempt from this check (<code>DEFAULT_EXEMPT_PACKAGES</code> in <code>check_go_coverage.py</code>). Its <code>TestCLI_*</code> tests build the real binary and run it as a subprocess, so <code>go test -coverprofile</code> can't see any of the code paths they exercise — its low measured number reflects a blind spot in subprocess-based CLI testing, not an actual gap.</p>
+</div>
+<p><strong>Python coverage</strong> is an aggregate across <code>scripts/*.py</code> (excluding <code>scripts/tests/</code> itself, via <code>.coveragerc</code>), enforced with <code>pytest-cov</code>'s <code>--cov-fail-under</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Override either threshold locally:</span>
+make<span class="w"> </span>coverage-check<span class="w"> </span><span class="nv">GO_COVERAGE_THRESHOLD</span><span class="o">=</span><span class="m">80</span>
+make<span class="w"> </span>test-python<span class="w"> </span><span class="nv">PY_COVERAGE_THRESHOLD</span><span class="o">=</span><span class="m">80</span>
+</code></pre></div>
 <h2 id="incremental-generation">Incremental generation<a class="headerlink" href="#incremental-generation" title="Permanent link">&para;</a></h2>
 <p>Pass <code>--incremental</code> to skip regenerating DAGs whose content hasn't changed since the last run. The generator writes a <code>.daggen-cache.json</code> hash file to the output directory and compares SHA-256 hashes on subsequent runs.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># First run — generates all DAGs and writes cache</span>
