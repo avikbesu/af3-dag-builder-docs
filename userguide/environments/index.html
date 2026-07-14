@@ -1368,16 +1368,7 @@ flowchart TD
     F --&gt; G["Per task: drop if enabled[env]==false,\nclean dangling dependency edges,\nmerge params._env[env]"]
     G --&gt; I["Per task: merge task-level _env[env]\ntrigger_rule, pool, pool_slots, queue,\npriority_weight, weight_rule,\nexecution_timeout_minutes, sla_minutes"]
     I --&gt; H["Resolved DAG -&gt; rendered to output/dags/*.py"]</code></pre>
-<ol>
-<li><code>enabled_envs</code> whitelist (if set, the active env must be in the list)</li>
-<li><code>enabled_clusters</code> whitelist (if set, the active env's cluster must be in the list)</li>
-<li><code>enabled_classes</code> whitelist (if set, the active env's class must be in the list)</li>
-<li>DAG <code>enabled[env] == false</code> → entire DAG skipped</li>
-<li><code>default_args._env[env]</code> merged onto base <code>default_args</code></li>
-<li>DAG-level <code>_env[env]</code> merged (schedule, catchup, max_active_runs, tags)</li>
-<li>Per task: <code>enabled[env] == false</code> → task omitted and downstream dependency edges cleaned; <code>params._env[env]</code> merged onto base <code>params</code> and the <code>_env</code> key removed from output</li>
-<li>Per task: task-level <code>_env[env]</code> merged (trigger_rule, pool, pool_slots, queue, priority_weight, weight_rule, execution_timeout_minutes, sla_minutes) — see <a href="#task-level-env-overrides">Task-level <code>_env</code> overrides</a></li>
-</ol>
+<p>The three whitelists (steps B/Y/C above — <code>enabled_envs</code>, <code>enabled_clusters</code>, <code>enabled_classes</code>) are covered in detail in <a href="#enabled_envs-enabled_clusters-and-enabled_classes"><code>enabled_envs</code>, <code>enabled_clusters</code>, and <code>enabled_classes</code></a> below; the merge steps (E/F/G/I) are covered in <a href="#dag-level-_env-overrides">DAG-level <code>_env</code> overrides</a> and <a href="#task-level-_env-overrides">Task-level <code>_env</code> overrides</a>.</p>
 <h2 id="environment-taxonomy-and-classes">Environment taxonomy and classes<a class="headerlink" href="#environment-taxonomy-and-classes" title="Permanent link">&para;</a></h2>
 <p>By default the generator recognises three built-in environment names and maps them to a class:</p>
 <table>
@@ -1693,7 +1684,7 @@ make<span class="w"> </span>generate<span class="w"> </span><span class="nv">ENV
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>Resolution order:</strong> <code>enabled_envs</code> is checked first, then <code>enabled_clusters</code>, then <code>enabled_classes</code>, then <code>enabled</code>. All must pass for the DAG to be generated.</p>
+<p>All four mechanisms must pass for the DAG to be generated — see the <a href="#environment-overrides">Full resolution order</a> diagram above for the exact check order.</p>
 </div>
 <h2 id="previewing-and-applying-environment-diffs">Previewing and applying environment diffs<a class="headerlink" href="#previewing-and-applying-environment-diffs" title="Permanent link">&para;</a></h2>
 <p>Before promoting a DAG from staging to prod, check exactly what will change:</p>

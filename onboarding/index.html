@@ -1030,23 +1030,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="3. Understand environment overrides">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clusters-and-classes-the-environment-hierarchy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Clusters and classes: the environment hierarchy
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1105,21 +1088,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-local-generation-optional" class="md-nav__link">
+  <a href="#9-who-to-contact" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Local generation (optional)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#10-who-to-contact" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Who to contact
+        9. Who to contact
       
     </span>
   </a>
@@ -1229,23 +1201,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="3. Understand environment overrides">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clusters-and-classes-the-environment-hierarchy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Clusters and classes: the environment hierarchy
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1304,21 +1259,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-local-generation-optional" class="md-nav__link">
+  <a href="#9-who-to-contact" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Local generation (optional)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#10-who-to-contact" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Who to contact
+        9. Who to contact
       
     </span>
   </a>
@@ -1353,45 +1297,18 @@ from it automatically.</p>
 <p>You never write raw Python DAG files. You write YAML, CI does the rest.</p>
 <hr />
 <h2 id="1-create-your-first-project">1. Create your first project<a class="headerlink" href="#1-create-your-first-project" title="Permanent link">&para;</a></h2>
-<p>Create your project directory and a starter config:</p>
-<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>config/projects/&lt;your-team&gt;
-touch<span class="w"> </span>config/projects/&lt;your-team&gt;/dags.yaml
-</code></pre></div>
-<p>Open the file and set at minimum:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span><span class="w">        </span><span class="c1"># must match current schema version</span>
-<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-team&gt;</span><span class="w">     </span><span class="c1"># used as file prefix in generated output</span>
-
-<span class="nt">dags</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-team&gt;_my_first_dag</span>
-<span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@daily&quot;</span>
-<span class="w">    </span><span class="nt">start_date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-01-01&quot;</span>
-<span class="w">    </span><span class="nt">catchup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">&lt;your-team&gt;</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">default_args</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-team&gt;</span>
-<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">      </span><span class="nt">retry_delay_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="w">      </span><span class="nt">email_on_failure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello</span>
-<span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BashOperator</span>
-<span class="w">        </span><span class="nt">params</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">&#39;Hello</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">&lt;your-team&gt;&#39;&quot;</span>
-</code></pre></div>
+<p>Follow the <a href="../userguide/quickstart/">Quickstart guide</a> — it walks through
+scaffolding <code>config/projects/&lt;your-team&gt;/dags.yaml</code>, validating it, generating
+your first DAG, and smoke-testing it in local Airflow, all in under five
+minutes. Substitute your team name for <code>my_team</code> throughout.</p>
 <hr />
 <h2 id="2-validate-locally-before-pushing">2. Validate locally before pushing<a class="headerlink" href="#2-validate-locally-before-pushing" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># Check your YAML against the schema (catches typos, wrong types, missing fields)</span>
-pip<span class="w"> </span>install<span class="w"> </span>jsonschema<span class="w"> </span>pyyaml
-python<span class="w"> </span>scripts/validate_configs.py
-
-<span class="c1"># Check for hardcoded secrets</span>
-python<span class="w"> </span>scripts/lint_secrets.py
-
-<span class="c1"># Check operator registry compliance</span>
-python<span class="w"> </span>scripts/validate_operators.py
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>check
 </code></pre></div>
-<p>The same checks run automatically on every PR; fixing them locally saves a
-round-trip.</p>
+<p>This runs the same schema, operator-registry, secrets, and naming-convention
+checks CI runs on every PR — fixing failures locally saves a round-trip. See
+<a href="../userguide/validation-ci/">Validation, Output &amp; CI</a> for what each check does
+individually.</p>
 <hr />
 <h2 id="3-understand-environment-overrides">3. Understand environment overrides<a class="headerlink" href="#3-understand-environment-overrides" title="Permanent link">&para;</a></h2>
 <p>Every field that should differ between <code>dev</code>, <code>staging</code>, and <code>prod</code> uses the
@@ -1415,38 +1332,12 @@ round-trip.</p>
 <span class="w">      </span><span class="nt">staging</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">   </span><span class="c1"># skipped entirely in staging</span>
 <span class="w">      </span><span class="nt">prod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
-<h3 id="clusters-and-classes-the-environment-hierarchy">Clusters and classes: the environment hierarchy<a class="headerlink" href="#clusters-and-classes-the-environment-hierarchy" title="Permanent link">&para;</a></h3>
-<p>Environment names aren't flat — <code>config/settings.yaml</code> can group them two ways:</p>
-<ul>
-<li><strong><code>class</code></strong> — a safety grouping (<code>production</code>, <code>staging</code>, <code>non-production</code>). <code>prod</code>/<code>prd</code>, <code>staging</code>/<code>stg</code> map to a class automatically; everything else defaults to <code>non-production</code> unless you say otherwise.</li>
-<li><strong><code>cluster</code></strong> — the actual Airflow <em>instance</em> an environment deploys to. Multiple environment names can share one cluster (e.g. a <code>dev</code> cluster hosting both a <code>dev</code> and a <code>demo</code> virtual environment).</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="c1"># config/settings.yaml</span>
-<span class="nt">environments</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">dev</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
-<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-instance</span>
-<span class="w">  </span><span class="nt">demo</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
-<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-instance</span><span class="w">   </span><span class="c1"># same Airflow instance as dev, different virtual env</span>
-<span class="w">  </span><span class="nt">stg</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
-<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stg-instance</span>
-<span class="w">  </span><span class="nt">preprd</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
-<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stg-instance</span>
-<span class="w">  </span><span class="nt">prd</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
-<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prd-instance</span>
-</code></pre></div>
-<p>A DAG can whitelist by any of the three, and they combine with AND logic:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">expensive_dag</span>
-<span class="w">    </span><span class="nt">enabled_envs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">qa</span><span class="p p-Indicator">]</span><span class="w">           </span><span class="c1"># only these specific env names</span>
-<span class="w">    </span><span class="nt">enabled_clusters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev-instance</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># only when the active env&#39;s cluster matches</span>
-<span class="w">    </span><span class="nt">enabled_classes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">non-production</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># only when the active env&#39;s class matches</span>
-</code></pre></div>
-<p>Task-level enable/disable stays env-only (<code>enabled: {env_name: bool}</code> as shown above) — there's no per-task cluster/class whitelist. See <code>docs/userguide/environments.md</code> for the full resolution order and more examples.</p>
+<p>Environment names can also be grouped into a <code>class</code> (safety grouping —
+production/staging/non-production) and a <code>cluster</code> (the actual Airflow
+instance an environment deploys to, letting several env names like <code>dev</code> and
+<code>demo</code> share one instance). See <a href="../userguide/environments/">Environments</a> for
+the full class/cluster taxonomy, the <code>enabled_envs</code>/<code>enabled_clusters</code>/
+<code>enabled_classes</code> whitelist fields, and the complete resolution order.</p>
 <hr />
 <h2 id="4-preview-the-resolved-config-promotion-helper">4. Preview the resolved config (promotion helper)<a class="headerlink" href="#4-preview-the-resolved-config-promotion-helper" title="Permanent link">&para;</a></h2>
 <p>Before enabling a DAG in prod, see exactly what will change:</p>
@@ -1605,18 +1496,7 @@ registration:</p>
 </table>
 <p>All checks must be green before a PR can be merged.</p>
 <hr />
-<h2 id="9-local-generation-optional">9. Local generation (optional)<a class="headerlink" href="#9-local-generation-optional" title="Permanent link">&para;</a></h2>
-<p>To generate DAG files locally for inspection:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Install tools</span>
-make<span class="w"> </span>build
-
-<span class="c1"># Generate DAGs</span>
-make<span class="w"> </span>generate<span class="w"> </span><span class="nv">ENV</span><span class="o">=</span>dev
-
-<span class="c1"># Generated files appear in output/dags/</span>
-</code></pre></div>
-<hr />
-<h2 id="10-who-to-contact">10. Who to contact<a class="headerlink" href="#10-who-to-contact" title="Permanent link">&para;</a></h2>
+<h2 id="9-who-to-contact">9. Who to contact<a class="headerlink" href="#9-who-to-contact" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Platform team</strong> — schema changes, generator bugs, registry approvals, new
   standard operators</li>

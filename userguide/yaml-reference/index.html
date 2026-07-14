@@ -1230,7 +1230,7 @@
 
 <h1 id="yaml-reference">YAML Reference<a class="headerlink" href="#yaml-reference" title="Permanent link">&para;</a></h1>
 <h2 id="project-level-fields">Project-level fields<a class="headerlink" href="#project-level-fields" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span><span class="w">          </span><span class="c1"># required; must be &quot;1.0&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span><span class="w">          </span><span class="c1"># optional; omitted configs are treated as &quot;1.0&quot; (the current schema version)</span>
 <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_project</span><span class="w">        </span><span class="c1"># required; alphanumeric + hyphens/underscores; used as filename prefix</span>
 
 <span class="nt">defaults</span><span class="p">:</span><span class="w">               </span><span class="c1"># applied to every DAG unless overridden at DAG level</span>
