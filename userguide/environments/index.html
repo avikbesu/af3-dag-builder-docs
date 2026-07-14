@@ -1,0 +1,1683 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Generate Apache Airflow 3 DAGs from a single canonical YAML config">
+      
+      
+      
+      
+        <link rel="prev" href="../yaml-reference/">
+      
+      
+        <link rel="next" href="../templates/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Environments - af3-dag-builder</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#environments" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="af3-dag-builder" class="md-header__button md-logo" aria-label="af3-dag-builder" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            af3-dag-builder
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Environments
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/avikbesu/af3-dag-builder" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../quickstart/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dags/container_workloads/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  DAG Diagrams
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../onboarding/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Onboarding
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../contributing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contributing
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="af3-dag-builder" class="md-nav__button md-logo" aria-label="af3-dag-builder" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    af3-dag-builder
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/avikbesu/af3-dag-builder" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ & Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../yaml-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    YAML Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environments
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#environment-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-taxonomy-and-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment taxonomy and classes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clusters-grouping-environments-by-airflow-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clusters: grouping environments by Airflow deployment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dag-level-_env-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DAG-level _env overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-level-_env-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task-level _env overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enabled_envs-enabled_clusters-and-enabled_classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enabled_envs, enabled_clusters, and enabled_classes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#previewing-and-applying-environment-diffs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Previewing and applying environment diffs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Previewing and applying environment diffs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generating-an-apply-patch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating an apply patch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Templates & Reuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-operators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operators & Callbacks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../validation-ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation, Output & CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced-features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../comparison/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparison vs DAG Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DAG Diagrams
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DAG Diagrams
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/container_workloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    container_workloads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/ecommerce_platform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ecommerce_platform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/project_a/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    project_a
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/project_b/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    project_b
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dags/scale_demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    scale_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../onboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Onboarding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#environment-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-taxonomy-and-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment taxonomy and classes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clusters-grouping-environments-by-airflow-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clusters: grouping environments by Airflow deployment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dag-level-_env-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DAG-level _env overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-level-_env-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task-level _env overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enabled_envs-enabled_clusters-and-enabled_classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enabled_envs, enabled_clusters, and enabled_classes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#previewing-and-applying-environment-diffs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Previewing and applying environment diffs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Previewing and applying environment diffs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generating-an-apply-patch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating an apply patch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="environments">Environments<a class="headerlink" href="#environments" title="Permanent link">&para;</a></h1>
+<h2 id="environment-overrides">Environment overrides<a class="headerlink" href="#environment-overrides" title="Permanent link">&para;</a></h2>
+<p>Any scalar field under <code>params</code> or <code>default_args</code> can be overridden per environment using the <code>_env</code> key. The base value is the fallback for environments not explicitly listed.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run_job</span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BashOperator</span>
+<span class="w">    </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">dev</span><span class="nv"> </span><span class="s">run&quot;</span><span class="w">      </span><span class="c1"># used in dev (and any unlisted env)</span>
+<span class="w">      </span><span class="nt">workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">_env</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">staging</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">staging</span><span class="nv"> </span><span class="s">run&quot;</span>
+<span class="w">          </span><span class="nt">workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">        </span><span class="nt">prod</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/opt/scripts/prod_run.sh&quot;</span>
+<span class="w">          </span><span class="nt">workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+</code></pre></div>
+<p><strong>Effective <code>params</code> after resolution, per environment:</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">dev</label><label for="__tabbed_1_2">staging</label><label for="__tabbed_1_3">prod</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">dev</span><span class="nv"> </span><span class="s">run&quot;</span>
+<span class="nt">workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">staging</span><span class="nv"> </span><span class="s">run&quot;</span>
+<span class="nt">workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/opt/scripts/prod_run.sh&quot;</span>
+<span class="nt">workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p><strong>Enable/disable a DAG per environment:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">expensive_dag</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">dev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">staging</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">    </span><span class="c1"># skipped in staging; not generated at all</span>
+<span class="w">      </span><span class="nt">prod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p><strong>Enable/disable a task per environment:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug_task</span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BashOperator</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">dev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">staging</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">prod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># task removed; its dependents&#39; upstream edges are cleaned up</span>
+<span class="w">    </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">debug&quot;</span>
+</code></pre></div>
+<p><strong>Full resolution order</strong> (this is the complete picture — it's what actually runs, in order, for every DAG on every generation):</p>
+<pre class="mermaid"><code>%%{init: {"look": "handDrawn"}}%%
+flowchart TD
+    A["DAG"] --&gt; B{"enabled_envs set\nand env not listed?"}
+    B --&gt;|yes| X["DAG excluded\n(not generated at all)"]
+    B --&gt;|no| Y{"enabled_clusters set\nand cluster not listed?"}
+    Y --&gt;|yes| X
+    Y --&gt;|no| C{"enabled_classes set\nand class not listed?"}
+    C --&gt;|yes| X
+    C --&gt;|no| D{"enabled[env] == false?"}
+    D --&gt;|yes| X
+    D --&gt;|no / unset| E["Merge default_args._env[env]"]
+    E --&gt; F["Merge DAG-level _env[env]\nschedule, catchup, max_active_runs, tags"]
+    F --&gt; G["Per task: drop if enabled[env]==false,\nclean dangling dependency edges,\nmerge params._env[env]"]
+    G --&gt; I["Per task: merge task-level _env[env]\ntrigger_rule, pool, pool_slots, queue,\npriority_weight, weight_rule,\nexecution_timeout_minutes, sla_minutes"]
+    I --&gt; H["Resolved DAG -&gt; rendered to output/dags/*.py"]</code></pre>
+<ol>
+<li><code>enabled_envs</code> whitelist (if set, the active env must be in the list)</li>
+<li><code>enabled_clusters</code> whitelist (if set, the active env's cluster must be in the list)</li>
+<li><code>enabled_classes</code> whitelist (if set, the active env's class must be in the list)</li>
+<li>DAG <code>enabled[env] == false</code> → entire DAG skipped</li>
+<li><code>default_args._env[env]</code> merged onto base <code>default_args</code></li>
+<li>DAG-level <code>_env[env]</code> merged (schedule, catchup, max_active_runs, tags)</li>
+<li>Per task: <code>enabled[env] == false</code> → task omitted and downstream dependency edges cleaned; <code>params._env[env]</code> merged onto base <code>params</code> and the <code>_env</code> key removed from output</li>
+<li>Per task: task-level <code>_env[env]</code> merged (trigger_rule, pool, pool_slots, queue, priority_weight, weight_rule, execution_timeout_minutes, sla_minutes) — see <a href="#task-level-env-overrides">Task-level <code>_env</code> overrides</a></li>
+</ol>
+<h2 id="environment-taxonomy-and-classes">Environment taxonomy and classes<a class="headerlink" href="#environment-taxonomy-and-classes" title="Permanent link">&para;</a></h2>
+<p>By default the generator recognises three built-in environment names and maps them to a class:</p>
+<table>
+<thead>
+<tr>
+<th>Environment name(s)</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prod</code>, <code>prd</code>, <code>production</code></td>
+<td><code>production</code></td>
+</tr>
+<tr>
+<td><code>staging</code>, <code>stg</code></td>
+<td><code>staging</code></td>
+</tr>
+<tr>
+<td>anything else (e.g. <code>dev</code>, <code>qa</code>)</td>
+<td><code>non-production</code></td>
+</tr>
+</tbody>
+</table>
+<p>You can replace this with an explicit taxonomy in <code>config/settings.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom</span>
+<span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prd-eu</span>
+
+<span class="nt">environments</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prd-eu</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Production</span><span class="nv"> </span><span class="s">EU&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">  </span><span class="nt">prd-us</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Production</span><span class="nv"> </span><span class="s">US&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">  </span><span class="nt">stg</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Staging&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+<span class="w">  </span><span class="nt">dev</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Development&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once defined, the class is used by <code>enabled_classes</code> filtering and shown in <code>make validate</code> output.</p>
+</div>
+<h2 id="clusters-grouping-environments-by-airflow-deployment">Clusters: grouping environments by Airflow deployment<a class="headerlink" href="#clusters-grouping-environments-by-airflow-deployment" title="Permanent link">&para;</a></h2>
+<p>Class groups environments by <em>safety semantics</em> (production vs. staging vs. non-production). Separately, <code>environments</code> entries can declare a <code>cluster</code>, which groups environments by <em>deployment topology</em> — which physical/logical Airflow cluster they run on. Multiple environment names can share one cluster:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom</span>
+<span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+
+<span class="nt">environments</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dev</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Development&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<span class="w">  </span><span class="nt">demo</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Demo&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<span class="w">  </span><span class="nt">stg</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Staging&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stg</span>
+<span class="w">  </span><span class="nt">preprd</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Pre-production&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stg</span>
+<span class="w">  </span><span class="nt">prd</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Production&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prd</span>
+</code></pre></div>
+<p>Here the <code>dev</code> cluster hosts both the <code>dev</code> and <code>demo</code> environments, the <code>stg</code> cluster hosts <code>stg</code> and <code>preprd</code>, and <code>prd</code> is its own single-environment cluster.</p>
+<p><code>cluster</code> is optional per environment entry; when omitted (or when no <code>environments</code> block is declared at all), <code>EnvCluster()</code> returns <code>""</code> and <code>enabled_clusters</code> whitelists are simply never satisfied by name — there is no built-in cluster-name inference the way there is for class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once defined, the cluster is used by <code>enabled_clusters</code> filtering and shown in <code>make validate</code> output.</p>
+</div>
+<h2 id="dag-level-_env-overrides">DAG-level <code>_env</code> overrides<a class="headerlink" href="#dag-level-_env-overrides" title="Permanent link">&para;</a></h2>
+<p>In addition to <code>params._env</code> and <code>default_args._env</code>, you can override DAG-level scheduling fields per environment using <code>_env</code> at the DAG level:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">heavy_pipeline</span>
+<span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@daily&quot;</span>
+<span class="w">    </span><span class="nt">catchup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">max_active_runs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">team_a</span><span class="p p-Indicator">]</span>
+
+<span class="w">    </span><span class="nt">_env</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">prod</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">3</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span><span class="w">    </span><span class="c1"># tighter cron in prod</span>
+<span class="w">        </span><span class="nt">max_active_runs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">        </span><span class="c1"># allow more concurrency in prod</span>
+<span class="w">      </span><span class="nt">staging</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">team_a</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">staging</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># add extra tag in staging</span>
+</code></pre></div>
+<p>Fields supported in a DAG-level <code>_env</code> block:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schedule</code></td>
+<td>Override the cron / preset schedule</td>
+</tr>
+<tr>
+<td><code>catchup</code></td>
+<td>Override the catchup flag</td>
+</tr>
+<tr>
+<td><code>max_active_runs</code></td>
+<td>Override the maximum concurrent runs</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>Replace the entire tags list</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only non-null values in the override block are applied; unset fields keep their base value.</p>
+</div>
+<h2 id="task-level-_env-overrides">Task-level <code>_env</code> overrides<a class="headerlink" href="#task-level-_env-overrides" title="Permanent link">&para;</a></h2>
+<p>In addition to <code>params._env</code> (arbitrary operator params) and the DAG-level <code>_env</code> block (schedule/catchup/max_active_runs/tags), a task's scheduling and execution fields can be overridden per environment using <code>_env</code> at the task level:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">heavy_transform</span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PythonOperator</span>
+<span class="w">    </span><span class="nt">pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default_pool</span>
+<span class="w">    </span><span class="nt">priority_weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">execution_timeout_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">    </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">python_callable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pkg.transform</span>
+
+<span class="w">    </span><span class="nt">_env</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">prod</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high_mem</span><span class="w">            </span><span class="c1"># run on a dedicated pool in prod</span>
+<span class="w">        </span><span class="nt">priority_weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">        </span><span class="c1"># prioritize in prod</span>
+<span class="w">        </span><span class="nt">execution_timeout_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span><span class="w">   </span><span class="c1"># allow longer runtime in prod</span>
+<span class="w">        </span><span class="nt">queue</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prod_queue</span>
+</code></pre></div>
+<p>Fields supported in a task-level <code>_env</code> block:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trigger_rule</code></td>
+<td>Override how this task reacts to upstream task state</td>
+</tr>
+<tr>
+<td><code>pool</code></td>
+<td>Override the Airflow pool this task runs in</td>
+</tr>
+<tr>
+<td><code>pool_slots</code></td>
+<td>Override the number of pool slots this task occupies</td>
+</tr>
+<tr>
+<td><code>queue</code></td>
+<td>Override the Celery/Kubernetes queue</td>
+</tr>
+<tr>
+<td><code>priority_weight</code></td>
+<td>Override the task's priority</td>
+</tr>
+<tr>
+<td><code>weight_rule</code></td>
+<td>Override the priority-weighting algorithm</td>
+</tr>
+<tr>
+<td><code>execution_timeout_minutes</code></td>
+<td>Override the maximum runtime before the task is killed</td>
+</tr>
+<tr>
+<td><code>sla_minutes</code></td>
+<td>Override the expected maximum duration before <code>on_sla_miss_callback</code> fires</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only non-null values in the override block are applied; unset fields keep their base value. For overriding operator-specific params (e.g. <code>bash_command</code>, connection ids), use <code>params._env</code> instead — see <a href="#environment-overrides">Environment overrides</a> above.</p>
+</div>
+<h2 id="enabled_envs-enabled_clusters-and-enabled_classes"><code>enabled_envs</code>, <code>enabled_clusters</code>, and <code>enabled_classes</code><a class="headerlink" href="#enabled_envs-enabled_clusters-and-enabled_classes" title="Permanent link">&para;</a></h2>
+<p>Three whitelist fields give you precise control over which environments a DAG is generated for, without maintaining a per-env <code>enabled</code> map.</p>
+<p><strong><code>enabled_envs</code></strong> — list of environment <em>names</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mock_data_loader</span>
+<span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@hourly&quot;</span>
+<span class="w">    </span><span class="nt">enabled_envs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">qa</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># only generated in dev and qa; skipped in staging and prod</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p><strong><code>enabled_clusters</code></strong> — list of Airflow <em>clusters</em> (as declared in settings.yaml's <code>environments</code> block):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster_scoped_dag</span>
+<span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@daily&quot;</span>
+<span class="w">    </span><span class="nt">enabled_clusters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># generated whenever the active env&#39;s cluster is &quot;dev&quot; (e.g. both dev and demo)</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p><strong><code>enabled_classes</code></strong> — list of environment <em>classes</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">integration_test_dag</span>
+<span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@daily&quot;</span>
+<span class="w">    </span><span class="nt">enabled_classes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">non-production</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># generated in dev and staging; never in prod</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p><strong>Comparison:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Key question</th>
+<th>Example use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled: {prod: false}</code></td>
+<td>Is this specific env explicitly disabled?</td>
+<td>One-off exclusion</td>
+</tr>
+<tr>
+<td><code>enabled_envs: [dev]</code></td>
+<td>Is the active env in this whitelist?</td>
+<td>Dev-only tooling</td>
+</tr>
+<tr>
+<td><code>enabled_clusters: [dev]</code></td>
+<td>Does the active env's cluster match?</td>
+<td>All envs deployed to the same Airflow cluster (e.g. dev + demo)</td>
+</tr>
+<tr>
+<td><code>enabled_classes: [non-production]</code></td>
+<td>Does the active env's class match?</td>
+<td>All non-prod envs regardless of name</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Resolution order:</strong> <code>enabled_envs</code> is checked first, then <code>enabled_clusters</code>, then <code>enabled_classes</code>, then <code>enabled</code>. All must pass for the DAG to be generated.</p>
+</div>
+<h2 id="previewing-and-applying-environment-diffs">Previewing and applying environment diffs<a class="headerlink" href="#previewing-and-applying-environment-diffs" title="Permanent link">&para;</a></h2>
+<p>Before promoting a DAG from staging to prod, check exactly what will change:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>scripts/promote.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--project<span class="w"> </span>my_team<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from<span class="w"> </span>staging<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--to<span class="w"> </span>prod
+</code></pre></div>
+<p>Output shows which DAGs change, which tasks are added/removed, and which parameters differ between the two environments.</p>
+<h3 id="generating-an-apply-patch">Generating an apply patch<a class="headerlink" href="#generating-an-apply-patch" title="Permanent link">&para;</a></h3>
+<p>Once you've reviewed the diff and decided which changes to backfill, use <code>--apply</code> to generate the minimal <code>_env.{to_env}</code> YAML stanza:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Print to stdout</span>
+python<span class="w"> </span>scripts/promote.py<span class="w"> </span>--project<span class="w"> </span>my_team<span class="w"> </span>--from<span class="w"> </span>staging<span class="w"> </span>--to<span class="w"> </span>prod<span class="w"> </span>--apply
+
+<span class="c1"># Write to a file for review</span>
+python<span class="w"> </span>scripts/promote.py<span class="w"> </span>--project<span class="w"> </span>my_team<span class="w"> </span>--from<span class="w"> </span>staging<span class="w"> </span>--to<span class="w"> </span>prod<span class="w"> </span>--apply<span class="w"> </span>--output<span class="w"> </span>patch.yaml
+</code></pre></div>
+<p>The output is a ready-to-paste YAML block. Copy the relevant sections into your <code>dags.yaml</code>, run <code>make validate</code>, then commit.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Makefile shortcut</span>
+make<span class="w"> </span>promote-apply<span class="w"> </span><span class="nv">PROJECT</span><span class="o">=</span>my_team<span class="w"> </span><span class="nv">FROM</span><span class="o">=</span>staging<span class="w"> </span><span class="nv">TO</span><span class="o">=</span>prod
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>--apply</code> shows <em>field-level</em> changes only. DAGs that are entirely enabled or disabled in one environment (but not the other) still require manual <code>enabled</code> configuration.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.tabs", "navigation.indexes", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
