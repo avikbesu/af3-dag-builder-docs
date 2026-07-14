@@ -1439,7 +1439,8 @@
 <li><strong>Syntax validation</strong> — every generated <code>.py</code> file is validated with <code>python3 -m py_compile</code> before reporting success</li>
 <li><strong>Makefile</strong> — all developer actions via <code>make</code></li>
 <li><strong>Environment taxonomy</strong> — define named environments with an optional class (<code>production</code>, <code>staging</code>, <code>non-production</code>) in <code>settings.yaml</code>; built-in defaults for <code>prd</code>/<code>prod</code>/<code>stg</code>/<code>staging</code>/<code>dev</code></li>
-<li><strong>Fine-grained env scoping</strong> — <code>enabled_envs</code> whitelist (DAG only generated for these named environments) and <code>enabled_classes</code> whitelist (DAG only generated when the active env belongs to this class); ideal for non-prod-only validation/mock DAGs</li>
+<li><strong>Airflow cluster grouping</strong> — group environments under a <code>cluster</code> in <code>settings.yaml</code> (e.g. a <code>dev</code> cluster hosting both <code>dev</code> and <code>demo</code>, a <code>stg</code> cluster hosting <code>stg</code> and <code>preprd</code>) to model deployment topology independently of the prod-safety class</li>
+<li><strong>Fine-grained env scoping</strong> — <code>enabled_envs</code> whitelist (DAG only generated for these named environments), <code>enabled_clusters</code> whitelist (DAG only generated when the active env belongs to this cluster), and <code>enabled_classes</code> whitelist (DAG only generated when the active env belongs to this class); ideal for non-prod-only validation/mock DAGs</li>
 <li><strong>DAG-level <code>_env</code> overrides</strong> — override <code>schedule</code>, <code>catchup</code>, <code>max_active_runs</code>, or <code>tags</code> per environment at the DAG level (previously only <code>params</code> and <code>default_args</code> supported <code>_env</code>)</li>
 <li><strong><code>dag_instances</code> list</strong> — stamp N DAGs from one template in a compact list; avoids repeating identical DAG blocks with <code>template:</code></li>
 <li><strong>Parallel generation</strong> — goroutine worker pool for concurrent <code>py_compile</code> validation; ~8× faster at 1000+ DAG scale</li>
@@ -1550,6 +1551,11 @@
 <td>Not provided</td>
 </tr>
 <tr>
+<td><strong>Cluster-scoped DAGs</strong></td>
+<td><code>enabled_clusters: [dev]</code> limits DAG to all envs sharing an Airflow cluster</td>
+<td>Not provided</td>
+</tr>
+<tr>
 <td><strong>Generator speed</strong></td>
 <td>Compiled Go binary</td>
 <td>Python (interpreted at runtime)</td>
@@ -1614,8 +1620,8 @@ make<span class="w"> </span>airflow-down
 </tr>
 <tr>
 <td><code>environments</code></td>
-<td>map of name → <code>{class: production\|staging\|non-production}</code></td>
-<td>Optional custom env taxonomy; built-in defaults used when omitted</td>
+<td>map of name → <code>{class: production\|staging\|non-production, cluster: &lt;name&gt;}</code></td>
+<td>Optional custom env taxonomy; <code>class</code> built-in defaults used when omitted, <code>cluster</code> groups env names onto one Airflow deployment (e.g. <code>dev</code>+<code>demo</code> → cluster <code>dev</code>)</td>
 </tr>
 <tr>
 <td><code>output.mode</code></td>
@@ -1659,6 +1665,8 @@ make<span class="w"> </span>airflow-down
 
 <span class="w">    </span><span class="nt">enabled_envs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">staging</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># whitelist: only generated for these env names</span>
 <span class="w">    </span><span class="c1"># OR:</span>
+<span class="w">    </span><span class="nt">enabled_clusters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">]</span><span class="w">        </span><span class="c1"># whitelist: only when env cluster matches (e.g. dev+demo)</span>
+<span class="w">    </span><span class="c1"># OR:</span>
 <span class="w">    </span><span class="nt">enabled_classes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">non-production</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># whitelist: only when env class matches</span>
 
 <span class="w">    </span><span class="nt">_env</span><span class="p">:</span><span class="w">                 </span><span class="c1"># DAG-level per-env overrides (schedule, catchup, max_active_runs, tags)</span>
@@ -1694,6 +1702,7 @@ make<span class="w"> </span>airflow-down
 <h3 id="environment-resolution-rules">Environment Resolution Rules<a class="headerlink" href="#environment-resolution-rules" title="Permanent link">&para;</a></h3>
 <ol>
 <li><code>dag.enabled_envs</code> set and env not in list → DAG skipped entirely</li>
+<li><code>dag.enabled_clusters</code> set and env cluster not in list → DAG skipped entirely</li>
 <li><code>dag.enabled_classes</code> set and env class not in list → DAG skipped entirely</li>
 <li><code>dag.enabled[env] == false</code> → DAG skipped entirely</li>
 <li><code>task.enabled[env] == false</code> → task omitted; downstream deps cleaned up</li>
@@ -1818,7 +1827,11 @@ make<span class="w"> </span>test-go<span class="w">       </span><span class="c1
 </tr>
 <tr>
 <td><code>make check</code></td>
-<td>All checks: schema + operators + secrets + linting + docs</td>
+<td>All checks: schema + operators + secrets + linting + multi-env render + docs + coverage</td>
+</tr>
+<tr>
+<td><code>make coverage-check</code></td>
+<td>Per-package Go coverage gate (<code>cmd/daggen</code> exempt — see script)</td>
 </tr>
 </tbody>
 </table>

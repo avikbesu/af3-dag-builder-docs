@@ -632,6 +632,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#clusters-grouping-environments-by-airflow-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clusters: grouping environments by Airflow deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clusters: grouping environments by Airflow deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#walkthrough-add-a-new-custom-cluster-with-multiple-environments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Walkthrough: add a new custom cluster with multiple environments
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dag-level-_env-overrides" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -654,10 +682,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#enabled_envs-and-enabled_classes" class="md-nav__link">
+  <a href="#enabled_envs-enabled_clusters-and-enabled_classes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        enabled_envs and enabled_classes
+        enabled_envs, enabled_clusters, and enabled_classes
       
     </span>
   </a>
@@ -1160,6 +1188,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#clusters-grouping-environments-by-airflow-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clusters: grouping environments by Airflow deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clusters: grouping environments by Airflow deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#walkthrough-add-a-new-custom-cluster-with-multiple-environments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Walkthrough: add a new custom cluster with multiple environments
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dag-level-_env-overrides" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1182,10 +1238,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#enabled_envs-and-enabled_classes" class="md-nav__link">
+  <a href="#enabled_envs-enabled_clusters-and-enabled_classes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        enabled_envs and enabled_classes
+        enabled_envs, enabled_clusters, and enabled_classes
       
     </span>
   </a>
@@ -1301,7 +1357,9 @@
 flowchart TD
     A["DAG"] --&gt; B{"enabled_envs set\nand env not listed?"}
     B --&gt;|yes| X["DAG excluded\n(not generated at all)"]
-    B --&gt;|no| C{"enabled_classes set\nand class not listed?"}
+    B --&gt;|no| Y{"enabled_clusters set\nand cluster not listed?"}
+    Y --&gt;|yes| X
+    Y --&gt;|no| C{"enabled_classes set\nand class not listed?"}
     C --&gt;|yes| X
     C --&gt;|no| D{"enabled[env] == false?"}
     D --&gt;|yes| X
@@ -1310,15 +1368,7 @@ flowchart TD
     F --&gt; G["Per task: drop if enabled[env]==false,\nclean dangling dependency edges,\nmerge params._env[env]"]
     G --&gt; I["Per task: merge task-level _env[env]\ntrigger_rule, pool, pool_slots, queue,\npriority_weight, weight_rule,\nexecution_timeout_minutes, sla_minutes"]
     I --&gt; H["Resolved DAG -&gt; rendered to output/dags/*.py"]</code></pre>
-<ol>
-<li><code>enabled_envs</code> whitelist (if set, the active env must be in the list)</li>
-<li><code>enabled_classes</code> whitelist (if set, the active env's class must be in the list)</li>
-<li>DAG <code>enabled[env] == false</code> → entire DAG skipped</li>
-<li><code>default_args._env[env]</code> merged onto base <code>default_args</code></li>
-<li>DAG-level <code>_env[env]</code> merged (schedule, catchup, max_active_runs, tags)</li>
-<li>Per task: <code>enabled[env] == false</code> → task omitted and downstream dependency edges cleaned; <code>params._env[env]</code> merged onto base <code>params</code> and the <code>_env</code> key removed from output</li>
-<li>Per task: task-level <code>_env[env]</code> merged (trigger_rule, pool, pool_slots, queue, priority_weight, weight_rule, execution_timeout_minutes, sla_minutes) — see <a href="#task-level-env-overrides">Task-level <code>_env</code> overrides</a></li>
-</ol>
+<p>The three whitelists (steps B/Y/C above — <code>enabled_envs</code>, <code>enabled_clusters</code>, <code>enabled_classes</code>) are covered in detail in <a href="#enabled_envs-enabled_clusters-and-enabled_classes"><code>enabled_envs</code>, <code>enabled_clusters</code>, and <code>enabled_classes</code></a> below; the merge steps (E/F/G/I) are covered in <a href="#dag-level-_env-overrides">DAG-level <code>_env</code> overrides</a> and <a href="#task-level-_env-overrides">Task-level <code>_env</code> overrides</a>.</p>
 <h2 id="environment-taxonomy-and-classes">Environment taxonomy and classes<a class="headerlink" href="#environment-taxonomy-and-classes" title="Permanent link">&para;</a></h2>
 <p>By default the generator recognises three built-in environment names and maps them to a class:</p>
 <table>
@@ -1365,6 +1415,106 @@ flowchart TD
 <p class="admonition-title">Note</p>
 <p>Once defined, the class is used by <code>enabled_classes</code> filtering and shown in <code>make validate</code> output.</p>
 </div>
+<h2 id="clusters-grouping-environments-by-airflow-deployment">Clusters: grouping environments by Airflow deployment<a class="headerlink" href="#clusters-grouping-environments-by-airflow-deployment" title="Permanent link">&para;</a></h2>
+<p>Class groups environments by <em>safety semantics</em> (production vs. staging vs. non-production). Separately, <code>environments</code> entries can declare a <code>cluster</code>, which groups environments by <em>deployment topology</em> — which physical/logical Airflow cluster they run on. Multiple environment names can share one cluster:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom</span>
+<span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+
+<span class="nt">environments</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dev</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Development&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<span class="w">  </span><span class="nt">demo</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Demo&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<span class="w">  </span><span class="nt">stg</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Staging&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stg</span>
+<span class="w">  </span><span class="nt">preprd</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Pre-production&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stg</span>
+<span class="w">  </span><span class="nt">prd</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Production&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prd</span>
+</code></pre></div>
+<p>Here the <code>dev</code> cluster hosts both the <code>dev</code> and <code>demo</code> environments, the <code>stg</code> cluster hosts <code>stg</code> and <code>preprd</code>, and <code>prd</code> is its own single-environment cluster.</p>
+<p><code>cluster</code> is optional per environment entry; when omitted (or when no <code>environments</code> block is declared at all), <code>EnvCluster()</code> returns <code>""</code> and <code>enabled_clusters</code> whitelists are simply never satisfied by name — there is no built-in cluster-name inference the way there is for class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once defined, the cluster is used by <code>enabled_clusters</code> filtering and shown in <code>make validate</code> output.</p>
+</div>
+<h3 id="walkthrough-add-a-new-custom-cluster-with-multiple-environments">Walkthrough: add a new custom cluster with multiple environments<a class="headerlink" href="#walkthrough-add-a-new-custom-cluster-with-multiple-environments" title="Permanent link">&para;</a></h3>
+<p>Say you're standing up a brand-new Airflow instance, <code>qa-cluster</code>, that will host three virtual environments: <code>qa1</code>, <code>qa2</code>, and <code>qa3</code>.</p>
+<p><strong>Step 1 — declare the cluster and its environments in <code>config/settings.yaml</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom</span>
+<span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qa1</span><span class="w">          </span><span class="c1"># the environment this generation run targets</span>
+
+<span class="nt">environments</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">qa1</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;QA</span><span class="nv"> </span><span class="s">1&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qa-cluster</span>
+<span class="w">  </span><span class="nt">qa2</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;QA</span><span class="nv"> </span><span class="s">2&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qa-cluster</span>
+<span class="w">  </span><span class="nt">qa3</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;QA</span><span class="nv"> </span><span class="s">3&quot;</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">non-production</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qa-cluster</span>
+<span class="w">  </span><span class="c1"># ...your existing dev/stg/prd entries stay as they are</span>
+</code></pre></div>
+<p>All three envs share <code>cluster: qa-cluster</code>, so anything scoped to that cluster runs identically across <code>qa1</code>, <code>qa2</code>, and <code>qa3</code> — but each keeps its own env name for <code>_env</code> overrides, <code>enabled: {}</code> maps, etc.</p>
+<p><strong>Step 2a — a DAG that should run on every env in this cluster</strong> (any of <code>qa1</code>/<code>qa2</code>/<code>qa3</code>, but nowhere else):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qa_cluster_smoke_test</span>
+<span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@daily&quot;</span>
+<span class="w">    </span><span class="nt">start_date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-01-01&quot;</span>
+<span class="w">    </span><span class="nt">catchup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">enabled_clusters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">qa-cluster</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># runs whenever the active env&#39;s cluster is qa-cluster</span>
+<span class="w">    </span><span class="nt">default_args</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">platform</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">retry_delay_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">    </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ping</span>
+<span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BashOperator</span>
+<span class="w">        </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">qa-cluster</span><span class="nv"> </span><span class="s">smoke</span><span class="nv"> </span><span class="s">test&quot;</span>
+</code></pre></div>
+<p><strong>Step 2b — a DAG scoped to only one specific env in that cluster</strong> (e.g. <code>qa2</code> only, not <code>qa1</code> or <code>qa3</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qa2_only_experiment</span>
+<span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@daily&quot;</span>
+<span class="w">    </span><span class="nt">start_date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-01-01&quot;</span>
+<span class="w">    </span><span class="nt">catchup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">enabled_envs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">qa2</span><span class="p p-Indicator">]</span><span class="w">              </span><span class="c1"># runs only when the active env is exactly qa2</span>
+<span class="w">    </span><span class="nt">default_args</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">platform</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">retry_delay_minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">    </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BashOperator</span>
+<span class="w">        </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">bash_command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">qa2-only</span><span class="nv"> </span><span class="s">run&quot;</span>
+</code></pre></div>
+<p><strong>Step 3 — generate and confirm.</strong> The generator always targets one active environment per run (whichever <code>environment:</code> in <code>settings.yaml</code> points to, or <code>--env</code>/<code>ENV=</code> override). Run it once per environment you need output for:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>validate<span class="w"> </span><span class="nv">ENV</span><span class="o">=</span>qa1<span class="w">   </span><span class="c1"># confirm which DAGs would generate for qa1</span>
+make<span class="w"> </span>generate<span class="w"> </span><span class="nv">ENV</span><span class="o">=</span>qa1<span class="w">   </span><span class="c1"># qa_cluster_smoke_test: enabled | qa2_only_experiment: skipped</span>
+
+make<span class="w"> </span>validate<span class="w"> </span><span class="nv">ENV</span><span class="o">=</span>qa2
+make<span class="w"> </span>generate<span class="w"> </span><span class="nv">ENV</span><span class="o">=</span>qa2<span class="w">   </span><span class="c1"># qa_cluster_smoke_test: enabled | qa2_only_experiment: enabled</span>
+
+make<span class="w"> </span>validate<span class="w"> </span><span class="nv">ENV</span><span class="o">=</span>qa3
+make<span class="w"> </span>generate<span class="w"> </span><span class="nv">ENV</span><span class="o">=</span>qa3<span class="w">   </span><span class="c1"># qa_cluster_smoke_test: enabled | qa2_only_experiment: skipped</span>
+</code></pre></div>
+<p><code>make validate</code> prints <code>cluster=qa-cluster</code> in its <code>Settings valid: ...</code> line and lists each DAG as <code>[enabled]</code>/<code>[disabled]</code>, so you can confirm the scoping before generating.</p>
 <h2 id="dag-level-_env-overrides">DAG-level <code>_env</code> overrides<a class="headerlink" href="#dag-level-_env-overrides" title="Permanent link">&para;</a></h2>
 <p>In addition to <code>params._env</code> and <code>default_args._env</code>, you can override DAG-level scheduling fields per environment using <code>_env</code> at the DAG level:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
@@ -1477,13 +1627,20 @@ flowchart TD
 <p class="admonition-title">Note</p>
 <p>Only non-null values in the override block are applied; unset fields keep their base value. For overriding operator-specific params (e.g. <code>bash_command</code>, connection ids), use <code>params._env</code> instead — see <a href="#environment-overrides">Environment overrides</a> above.</p>
 </div>
-<h2 id="enabled_envs-and-enabled_classes"><code>enabled_envs</code> and <code>enabled_classes</code><a class="headerlink" href="#enabled_envs-and-enabled_classes" title="Permanent link">&para;</a></h2>
-<p>Two whitelist fields give you precise control over which environments a DAG is generated for, without maintaining a per-env <code>enabled</code> map.</p>
+<h2 id="enabled_envs-enabled_clusters-and-enabled_classes"><code>enabled_envs</code>, <code>enabled_clusters</code>, and <code>enabled_classes</code><a class="headerlink" href="#enabled_envs-enabled_clusters-and-enabled_classes" title="Permanent link">&para;</a></h2>
+<p>Three whitelist fields give you precise control over which environments a DAG is generated for, without maintaining a per-env <code>enabled</code> map.</p>
 <p><strong><code>enabled_envs</code></strong> — list of environment <em>names</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mock_data_loader</span>
 <span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@hourly&quot;</span>
 <span class="w">    </span><span class="nt">enabled_envs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">qa</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># only generated in dev and qa; skipped in staging and prod</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p><strong><code>enabled_clusters</code></strong> — list of Airflow <em>clusters</em> (as declared in settings.yaml's <code>environments</code> block):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster_scoped_dag</span>
+<span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;@daily&quot;</span>
+<span class="w">    </span><span class="nt">enabled_clusters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># generated whenever the active env&#39;s cluster is &quot;dev&quot; (e.g. both dev and demo)</span>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
 <p><strong><code>enabled_classes</code></strong> — list of environment <em>classes</em>:</p>
@@ -1514,6 +1671,11 @@ flowchart TD
 <td>Dev-only tooling</td>
 </tr>
 <tr>
+<td><code>enabled_clusters: [dev]</code></td>
+<td>Does the active env's cluster match?</td>
+<td>All envs deployed to the same Airflow cluster (e.g. dev + demo)</td>
+</tr>
+<tr>
 <td><code>enabled_classes: [non-production]</code></td>
 <td>Does the active env's class match?</td>
 <td>All non-prod envs regardless of name</td>
@@ -1522,7 +1684,7 @@ flowchart TD
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>Resolution order:</strong> <code>enabled_envs</code> is checked first, then <code>enabled_classes</code>, then <code>enabled</code>. All must pass for the DAG to be generated.</p>
+<p>All four mechanisms must pass for the DAG to be generated — see the <a href="#environment-overrides">Full resolution order</a> diagram above for the exact check order.</p>
 </div>
 <h2 id="previewing-and-applying-environment-diffs">Previewing and applying environment diffs<a class="headerlink" href="#previewing-and-applying-environment-diffs" title="Permanent link">&para;</a></h2>
 <p>Before promoting a DAG from staging to prod, check exactly what will change:</p>
