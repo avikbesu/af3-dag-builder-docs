@@ -1305,10 +1305,10 @@ minutes. Substitute your team name for <code>my_team</code> throughout.</p>
 <h2 id="2-validate-locally-before-pushing">2. Validate locally before pushing<a class="headerlink" href="#2-validate-locally-before-pushing" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>check
 </code></pre></div>
-<p>This runs the same schema, operator-registry, secrets, and naming-convention
-checks CI runs on every PR — fixing failures locally saves a round-trip. See
-<a href="../userguide/validation-ci/">Validation, Output &amp; CI</a> for what each check does
-individually.</p>
+<p>This runs the same schema, operator-registry, secrets, naming-convention, and
+multi-environment render checks CI runs on every PR — fixing failures locally
+saves a round-trip. See <a href="../userguide/validation-ci/">Validation, Output &amp; CI</a>
+for what each check does individually.</p>
 <hr />
 <h2 id="3-understand-environment-overrides">3. Understand environment overrides<a class="headerlink" href="#3-understand-environment-overrides" title="Permanent link">&para;</a></h2>
 <p>Every field that should differ between <code>dev</code>, <code>staging</code>, and <code>prod</code> uses the
